@@ -3,7 +3,7 @@ services:
     image: postgres:12.18
     restart: always
     ports:
-      - "5433:5432"
+      - "5434:5432"
     environment:
       POSTGRES_PASSWORD: postgres
       POSTGRES_DB: ejemplo
@@ -17,7 +17,7 @@ services:
     container_name: tomcat-api
     environment:
       DB_HOST: db
-      DB_PORT: 5432
+      DB_PORT: 5434
       DB_NAME: ejemplo
       DB_USER: postgres
       DB_PASSWORD: postgres
@@ -33,7 +33,7 @@ services:
   frontend:
     image: front
     ports:
-      - "8080:80"
+      - "4200:80"
     restart: always
     depends_on:
       - tomcat
