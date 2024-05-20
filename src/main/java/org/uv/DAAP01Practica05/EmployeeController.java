@@ -19,32 +19,36 @@ public class EmployeeController {
 
     private static final Logger logger = Logger.getLogger(EmployeeController.class.getName());
 
+    @CrossOrigin(origins = "*")
     @GetMapping()
-    public List<Employee> employeeList(){
+    public List<Employee> employeeList() {
         return employeeRepository.findAll();
     }
 
+    @CrossOrigin(origins = "*")
     @GetMapping("/{id}")
-    public ResponseEntity<Employee> get(@PathVariable Long id){
+    public ResponseEntity<Employee> get(@PathVariable Long id) {
         Optional<Employee> optionalEmployee = employeeRepository.findById(id);
         return optionalEmployee.map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
     }
 
+    @CrossOrigin(origins = "*")
     @PostMapping()
     @Transactional
-    public ResponseEntity<Employee> create(@RequestBody Employee employee){
+    public ResponseEntity<Employee> create(@RequestBody Employee employee) {
         employeeRepository.save(employee);
         logger.info("Employee created: " + employee.toString());
         return ResponseEntity.ok(employee);
     }
 
+    @CrossOrigin(origins = "*")
     @PutMapping("/{id}")
     @Transactional
-    public ResponseEntity<Employee> update(@PathVariable Long id, @RequestBody Employee employee){
+    public ResponseEntity<Employee> update(@PathVariable Long id, @RequestBody Employee employee) {
         Optional<Employee> optionalEmployee = employeeRepository.findById(id);
 
-        if(optionalEmployee.isEmpty())
+        if (optionalEmployee.isEmpty())
             return ResponseEntity.notFound().build();
 
         employee.setKey(id);
@@ -54,12 +58,13 @@ public class EmployeeController {
         return ResponseEntity.ok(employee);
     }
 
+    @CrossOrigin(origins = "*")
     @DeleteMapping("/{id}")
     @Transactional
-    public ResponseEntity<?> delete(@PathVariable Long id){
+    public ResponseEntity<?> delete(@PathVariable Long id) {
         Optional<Employee> optionalEmployee = employeeRepository.findById(id);
 
-        if(optionalEmployee.isEmpty())
+        if (optionalEmployee.isEmpty())
             return ResponseEntity.notFound().build();
 
         employeeRepository.deleteById(id);

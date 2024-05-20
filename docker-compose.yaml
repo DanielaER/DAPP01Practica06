@@ -1,17 +1,9 @@
-
 services:
   db:
-    image: postgres:12.18
-    restart: always
-    ports:
-      - "5433:5432"
-    environment:
-      POSTGRES_PASSWORD: postgres
-      POSTGRES_DB: ejemplo
     container_name: postgresuv
 
   tomcat:
-    image: tomcat:9.0
+    image: tomcat:9.0.87-jdk11
     container_name: tomcat-api
     environment:
       DB_HOST: db
@@ -24,17 +16,14 @@ services:
     ports:
       - "8080:8080"
     volumes:
-      - ./api:/usr/local/tomcat/webapps/api
-    command: /bin/bash -c "cp /usr/local/tomcat/webapps/api.war /usr/local/tomcat/webapps/ROOT.war && catalina.sh run"
+      - /c/Users/Danielaa/Desktop/DESARROLLO/PRACTICAS\ TOMCAT/DAAP01Practica05/target:/usr/local/tomcat/webapps
+    command: /bin/bash -c "cp /usr/local/tomcat/webapps/DAPP01Practica05-0.0.1-SNAPSHOT.war /usr/local/tomcat/webapps/ROOT.war && catalina.sh run"
+    restart: always
 
-  angular:
-    image: node:14
-    container_name: angular-frontend
-    working_dir: /app
-    command: /bin/bash -c "npm install && npm run start"
+  frontend:
+    image: front
     ports:
-      - "4200:4200"
+      - "8080:80"
+    restart: always
     depends_on:
       - tomcat
-    volumes:
-      - ./frontend:/app
