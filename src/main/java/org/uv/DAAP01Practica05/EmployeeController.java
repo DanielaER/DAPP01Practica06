@@ -11,20 +11,21 @@ import java.util.List;
 import java.util.Optional;
 import java.util.logging.Logger;
 
+@CrossOrigin(origins = "*")
 @RestController
-@RequestMapping("employees")
+@RequestMapping("/employees")
 public class EmployeeController {
     @Autowired
     private EmployeeRepository employeeRepository;
 
     private static final Logger logger = Logger.getLogger(EmployeeController.class.getName());
-
+    
     @CrossOrigin(origins = "*")
     @GetMapping()
     public List<Employee> employeeList() {
         return employeeRepository.findAll();
     }
-
+    
     @CrossOrigin(origins = "*")
     @GetMapping("/{id}")
     public ResponseEntity<Employee> get(@PathVariable Long id) {
@@ -32,7 +33,7 @@ public class EmployeeController {
         return optionalEmployee.map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
     }
-
+    
     @CrossOrigin(origins = "*")
     @PostMapping()
     @Transactional

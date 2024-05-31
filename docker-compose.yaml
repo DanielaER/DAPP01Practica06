@@ -1,39 +1,30 @@
 services:
-  db:
+  postgresuv:
     image: postgres:12.18
     restart: always
     ports:
-      - "5434:5432"
+      - 5432:5432
     environment:
       POSTGRES_PASSWORD: postgres
       POSTGRES_DB: ejemplo
     container_name: postgresuv
     volumes:
-      - /var/lib/docker/volumes/963c06a35ce612ffe09fd00b71a2b605dfedd259faaa02d68a6a9c2c3162a60d/_data:/var/lib/postgresql/data
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql:ro
 
-
-  tomcat:
+  tomcat-api:
     image: tomcat-api
-    container_name: tomcat-api
-    environment:
-      DB_HOST: db
-      DB_PORT: 5434
-      DB_NAME: ejemplo
-      DB_USER: postgres
-      DB_PASSWORD: postgres
-    depends_on:
-      - db
-    volumes:
-      - ./DAAP01Practica05/targe/Practica06:/target/Practica06
     ports:
-        - "8000:8080"
-    command: /bin/bash -c "catalina.sh run"
+      - 8000:8080
+    container_name: tomcat-api
+    depends_on:
+      - postgresuv
     restart: always
+    build: .
 
   frontend:
     image: front
     ports:
-      - "4200:80"
+      - 4200:80
     restart: always
     depends_on:
-      - tomcat
+      - tomcat-api
